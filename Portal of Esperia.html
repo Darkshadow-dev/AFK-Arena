@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/png" href="Website-Guide.png">
+<link rel="icon" type="image/png" href="Website-Guide.png" />
 <title>Portal of Esperia</title>
 
 <style>
+/* Your CSS remains unchanged */
 body {
   font-family: Arial, sans-serif;
   background: #0b0e14;
@@ -14,15 +15,11 @@ body {
   margin: 0;
   padding: 20px;
 }
-
-/* HEADER */
 h1 {
   text-align: center;
   color: #4dd9ff;
   margin-bottom: 18px;
 }
-
-/* FILTER BOX */
 .custom-select {
   position: relative;
   display: inline-block;
@@ -53,14 +50,10 @@ h1 {
 .select-options div:hover {
   background: #29354d;
 }
-
-/* LIST */
 .link-list {
   max-width: 650px;
   margin: auto;
 }
-
-/* CARD */
 .link-item {
   background: #121a2a;
   padding: 15px;
@@ -75,8 +68,6 @@ h1 {
   color: #78e9ff;
   font-weight: bold;
 }
-
-/* ACTION ROW */
 .actions {
   display: flex;
   gap: 10px;
@@ -102,7 +93,8 @@ h1 {
   border-radius: 6px;
   font-weight: bold;
 }
-.share-btn, .qr-btn {
+.share-btn,
+.qr-btn {
   padding: 8px 14px;
   background: #0078ff;
   border: 2px solid #60b8ff;
@@ -110,35 +102,34 @@ h1 {
   cursor: pointer;
   color: white;
 }
-
-/* POPUP */
 .share-popup {
-  display:none;
+  display: none;
   position: fixed;
   bottom: 20px;
   right: 20px;
   background: #132033;
-  border:3px solid #58e2ff;
+  border: 3px solid #58e2ff;
   padding: 15px;
   border-radius: 12px;
 }
 .share-popup button {
-  width:100%;
-  margin-bottom:7px;
-  padding:8px;
-  border-radius:8px;
-  cursor:pointer;
+  width: 100%;
+  margin-bottom: 7px;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
 }
-    /* Hide default scrollbar */
-    ::-webkit-scrollbar {
-      display: none;
-    }
+/* Hide default scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
 </style>
 </head>
 <body>
 
 <h1>AFK Arena Link Hub</h1>
-        <a href="contact.html" class="active">Contact Us</a>
+<a href="contact.html" class="active">Contact Us</a>
+
 <div style="text-align:right; margin-bottom:15px;">
   <div class="custom-select">
     <div id="filterBox" class="select-box">All</div>
@@ -173,162 +164,182 @@ h1 {
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 <script>
-firebase.initializeApp({
-  apiKey: "AIzaSyBcLsgOSSf2cUNK_9G49L7kSbuzZ2lt0VQ",
-  authDomain: "afk-arena-e8f4a.firebaseapp.com",
-  projectId: "afk-arena-e8f4a",
-  storageBucket: "afk-arena-e8f4a.firebasestorage.app",
-  messagingSenderId: "827652125732",
-  appId: "1:827652125732:web:d8026c1fe271483aaf54b1"
-});
+  firebase.initializeApp({
+    apiKey: "AIzaSyBcLsgOSSf2cUNK_9G49L7kSbuzZ2lt0VQ",
+    authDomain: "afk-arena-e8f4a.firebaseapp.com",
+    projectId: "afk-arena-e8f4a",
+    storageBucket: "afk-arena-e8f4a.appspot.com",
+    messagingSenderId: "827652125732",
+    appId: "1:827652125732:web:d8026c1fe271483aaf54b1",
+    databaseURL: "https://afk-arena-e8f4a-default-rtdb.firebaseio.com" // add your databaseURL here!
+  });
 </script>
 
 <script>
+  const db = firebase.database();
 
-const db = firebase.database();
+  // Fix duplicate IDs - unique per link
+  const links = [
+    { id: "official_website", name: "Official Website", url: "https://afkarena.lilith.com/", type: "official" },
+    { id: "official_store", name: "Official Store", url: "https://store.lilith.com/", type: "official" },
+    { id: "official_wiki", name: "Official Wiki", url: "https://en.wikipedia.org/", type: "official" },
+    { id: "discord", name: "Official Discord", url: "https://discord.gg/afkarena", type: "official" },
+    { id: "instagram", name: "Official Instagram", url: "https://instagram.com/afkarenaofficial", type: "official" },
+    { id: "youtube", name: "Official YouTube", url: "https://youtube.com/afkarena", type: "official" },
+    { id: "fandom_wiki", name: "Fandom Wiki", url: "https://afk-arena.fandom.com/wiki/AFK_Arena_Wiki", type: "unofficial" },
+    { id: "reddit", name: "Reddit", url: "https://reddit.com/r/afkarena", type: "unofficial" }
+  ];
 
-// Website list
-const links=[
- {id:"official_site",name:"Official Website",url:"https://afkarena.lilith.com//",type:"official"},
- {id:"official_site",name:"Official Store",url:"https://store.lilith.com///",type:"official"},
- {id:"official_site",name:"Official Wiki",url:"https://en.wikipedia.org//",type:"official"},
- {id:"discord",name:"Official Discord",url:"https://discord.gg/afkarena",type:"official"},
- {id:"instagram",name:"Official Instagram",url:"https://instagram.com/afkarenaofficial",type:"official"},
- {id:"youtube",name:"Official YouTube",url:"https://youtube.com/afkarena",type:"official"},
- {id:"wiki",name:"Fandom Wiki",url:"https://afk-arena.fandom.com/wiki/AFK_Arena_Wiki",type:"unofficial"},
- {id:"reddit",name:"Reddit",url:"https://reddit.com/r/afkarena",type:"unofficial"}
-];
+  let votes = JSON.parse(localStorage.getItem("votes") || "{}");
 
-// Store votes locally
-let votes=JSON.parse(localStorage.getItem("votes")||"{}");
+  // Cache DOM elements for better performance & avoid global vars
+  const linkList = document.getElementById("linkList");
+  const filterBox = document.getElementById("filterBox");
+  const filterMenu = document.getElementById("filterMenu");
+  const sharePopup = document.getElementById("sharePopup");
+  const qrPopup = document.getElementById("qrPopup");
+  const qrImage = document.getElementById("qrImage");
 
-// Render all
-renderList();
+  renderList();
 
-function renderList(list=links){
-  linkList.innerHTML="";
-  list.forEach(link=>{
-    const card=document.createElement("div");
-    card.className="link-item";
-    card.innerHTML=`
-      <a class="link-title" href="${link.url}" target="_blank">${link.name}</a>
-      <div class="actions">
-        <div data-id="${link.id}" class="vote-btn like-btn">👍  
-          <span class="count" id="like-${link.id}">0</span>
+  function renderList(list = links) {
+    linkList.innerHTML = "";
+    list.forEach(link => {
+      const card = document.createElement("div");
+      card.className = "link-item";
+      card.innerHTML = `
+        <a class="link-title" href="${link.url}" target="_blank" rel="noopener noreferrer">${link.name}</a>
+        <div class="actions">
+          <div data-id="${link.id}" class="vote-btn like-btn">👍  
+            <span class="count" id="like-${link.id}">0</span>
+          </div>
+          <div data-id="${link.id}" class="vote-btn dislike-btn">👎
+            <span class="count" id="dislike-${link.id}">0</span>
+          </div>
+          <div class="share-btn" data-url="${link.url}">Share</div>
+          <div class="qr-btn" data-url="${link.url}">QR</div>
         </div>
-        <div data-id="${link.id}" class="vote-btn dislike-btn">👎
-          <span class="count" id="dislike-${link.id}">0</span>
-        </div>
-        <div class="share-btn" data-url="${link.url}">Share</div>
-        <div class="qr-btn" data-url="${link.url}">QR</div>
-      </div>
-    `;
-    linkList.appendChild(card);
+      `;
+      linkList.appendChild(card);
 
-    updateLiveCounters(link.id);
-    updateActiveState(link.id);
-  });
-}
-
-// Update counters live from Firebase
-function updateLiveCounters(id){
-  db.ref(`links/${id}/likes`).on("value", snap=>{
-    document.getElementById(`like-${id}`).textContent = snap.val() || 0;
-  });
-  db.ref(`links/${id}/dislikes`).on("value", snap=>{
-    document.getElementById(`dislike-${id}`).textContent = snap.val() || 0;
-  });
-}
-
-// Update active button
-function updateActiveState(id){
-  const likeBtn=document.querySelector(`[data-id="${id}"].like-btn`);
-  const dislikeBtn=document.querySelector(`[data-id="${id}"].dislike-btn`);
-
-  likeBtn.classList.remove("active");
-  dislikeBtn.classList.remove("active");
-
-  if(votes[id]==="like") likeBtn.classList.add("active");
-  if(votes[id]==="dislike") dislikeBtn.classList.add("active");
-}
-
-// Vote logic
-async function vote(id,type){
-  const previous=votes[id];
-
-  let path="";
-  let opposite="";
-
-  if(type==="like"){ path="likes"; opposite="dislikes"; }
-  if(type==="dislike"){ path="dislikes"; opposite="likes"; }
-
-  if(previous===type){
-    votes[id]=null;
-    db.ref(`links/${id}/${path}`).transaction(v => (v||0)-1);
+      updateLiveCounters(link.id);
+      updateActiveState(link.id);
+    });
   }
-  else{
-    votes[id]=type;
-    db.ref(`links/${id}/${path}`).transaction(v => (v||0)+1);
-    if(previous){
-      db.ref(`links/${id}/${opposite}`).transaction(v => (v||0)-1);
+
+  function updateLiveCounters(id) {
+    db.ref(`links/${id}/likes`).on("value", snap => {
+      const el = document.getElementById(`like-${id}`);
+      if (el) el.textContent = snap.val() || 0;
+    });
+    db.ref(`links/${id}/dislikes`).on("value", snap => {
+      const el = document.getElementById(`dislike-${id}`);
+      if (el) el.textContent = snap.val() || 0;
+    });
+  }
+
+  function updateActiveState(id) {
+    const likeBtn = document.querySelector(`[data-id="${id}"].like-btn`);
+    const dislikeBtn = document.querySelector(`[data-id="${id}"].dislike-btn`);
+
+    if (!likeBtn || !dislikeBtn) return;
+
+    likeBtn.classList.remove("active");
+    dislikeBtn.classList.remove("active");
+
+    if (votes[id] === "like") likeBtn.classList.add("active");
+    if (votes[id] === "dislike") dislikeBtn.classList.add("active");
+  }
+
+  async function vote(id, type) {
+    const previous = votes[id];
+
+    let path = "";
+    let opposite = "";
+
+    if (type === "like") {
+      path = "likes";
+      opposite = "dislikes";
     }
+    if (type === "dislike") {
+      path = "dislikes";
+      opposite = "likes";
+    }
+
+    if (previous === type) {
+      votes[id] = null;
+      await db.ref(`links/${id}/${path}`).transaction(v => (v || 0) - 1);
+    } else {
+      votes[id] = type;
+      await db.ref(`links/${id}/${path}`).transaction(v => (v || 0) + 1);
+      if (previous) {
+        await db.ref(`links/${id}/${opposite}`).transaction(v => (v || 0) - 1);
+      }
+    }
+
+    localStorage.setItem("votes", JSON.stringify(votes));
+    updateActiveState(id);
   }
 
-  localStorage.setItem("votes",JSON.stringify(votes));
-  updateActiveState(id);
-}
+  linkList.addEventListener("click", e => {
+    const like = e.target.closest(".like-btn");
+    const dislike = e.target.closest(".dislike-btn");
+    const share = e.target.closest(".share-btn");
+    const qr = e.target.closest(".qr-btn");
 
-// CLICK HANDLER
-linkList.addEventListener("click",e=>{
-  const like=e.target.closest(".like-btn");
-  const dislike=e.target.closest(".dislike-btn");
-  const share=e.target.closest(".share-btn");
-  const qr=e.target.closest(".qr-btn");
+    if (like) vote(like.dataset.id, "like");
+    if (dislike) vote(dislike.dataset.id, "dislike");
 
-  if(like) vote(like.dataset.id,"like");
-  if(dislike) vote(dislike.dataset.id,"dislike");
+    if (share) {
+      selectedURL = share.dataset.url;
+      sharePopup.style.display = "block";
+    }
 
-  if(share){
-    selectedURL = share.dataset.url;
-    sharePopup.style.display="block";
+    if (qr) {
+      qrPopup.style.display = "block";
+      qrImage.src =
+        "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
+        encodeURIComponent(qr.dataset.url);
+    }
+  });
+
+  let selectedURL = "";
+
+  function openWhatsApp() {
+    window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(selectedURL));
   }
 
-  if(qr){
-    qrPopup.style.display="block";
-    qrImage.src=
-      "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="
-      +encodeURIComponent(qr.dataset.url);
+  function copyShare() {
+    navigator.clipboard.writeText(selectedURL).then(() => alert("Copied!"));
   }
-});
 
-/****************** SHARE FUNCTIONS ******************/
-let selectedURL="";
-function openWhatsApp(){ window.open("https://api.whatsapp.com/send?text="+selectedURL); }
-function copyShare(){ navigator.clipboard.writeText(selectedURL); alert("Copied!"); }
-function emailShare(){ location.href="mailto:?body="+selectedURL; }
+  function emailShare() {
+    location.href = "mailto:?body=" + encodeURIComponent(selectedURL);
+  }
 
-/**************** FILTER *****************/
-filterBox.onclick=()=>{
- filterMenu.style.display=filterMenu.style.display==="block"?"none":"block";
-}
-filterMenu.onclick=e=>{
- const f=e.target.dataset.filter;
- if(!f)return;
- filterBox.innerText=e.target.innerText;
- filterMenu.style.display="none";
+  filterBox.onclick = () => {
+    filterMenu.style.display = filterMenu.style.display === "block" ? "none" : "block";
+  };
 
- if(f==="all") return renderList();
- if(f==="official") return renderList(links.filter(l=>l.type==="official"));
- if(f==="unofficial") return renderList(links.filter(l=>l.type==="unofficial"));
+  filterMenu.onclick = e => {
+    const f = e.target.dataset.filter;
+    if (!f) return;
+    filterBox.innerText = e.target.innerText;
+    filterMenu.style.display = "none";
 
- if(f==="top"){
-   const sorted=[...links].sort((a,b)=>{
-     return parseInt(document.getElementById("like-"+b.id).innerText) -
-            parseInt(document.getElementById("like-"+a.id).innerText);
-   });
-   return renderList(sorted);
- }
-}
+    if (f === "all") return renderList();
+    if (f === "official") return renderList(links.filter(l => l.type === "official"));
+    if (f === "unofficial") return renderList(links.filter(l => l.type === "unofficial"));
+
+    if (f === "top") {
+      const sorted = [...links].sort((a, b) => {
+        return parseInt(document.getElementById("like-" + b.id).innerText) -
+               parseInt(document.getElementById("like-" + a.id).innerText);
+      });
+      return renderList(sorted);
+    }
+  };
 </script>
+
 </body>
 </html>
