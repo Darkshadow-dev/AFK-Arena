@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="Website-Guide.png">
+<title>Portal of Esperia</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #0b0e14;
+  color: #ddd;
+  margin: 0;
+  padding: 20px;
+}
+
+/* HEADER */
+h1 {
+  text-align: center;
+  color: #4dd9ff;
+  margin-bottom: 18px;
+}
+
+/* FILTER BOX */
+.custom-select {
+  position: relative;
+  display: inline-block;
+}
+.select-box {
+  padding: 12px;
+  background: #1d2535;
+  border: 2px solid #4dd9ff;
+  width: 120px;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+}
+.select-options {
+  display: none;
+  position: absolute;
+  width: 120px;
+  background: #141b29;
+  border: 2px solid #4dd9ff;
+  border-radius: 8px;
+  margin-top: 4px;
+  z-index: 100;
+}
+.select-options div {
+  padding: 10px;
+  cursor: pointer;
+}
+.select-options div:hover {
+  background: #29354d;
+}
+
+/* LIST */
+.link-list {
+  max-width: 650px;
+  margin: auto;
+}
+
+/* CARD */
+.link-item {
+  background: #121a2a;
+  padding: 15px;
+  border: 1px solid #233145;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+.link-title {
+  display: block;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #78e9ff;
+  font-weight: bold;
+}
+
+/* ACTION ROW */
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.vote-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #182133;
+  border: 2px solid #39455e;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.vote-btn.active {
+  border-color: #4dd9ff;
+  background: #25405f;
+}
+.count {
+  background: #0c111a;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+.share-btn, .qr-btn {
+  padding: 8px 14px;
+  background: #0078ff;
+  border: 2px solid #60b8ff;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+}
+
+/* POPUP */
+.share-popup {
+  display:none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #132033;
+  border:3px solid #58e2ff;
+  padding: 15px;
+  border-radius: 12px;
+}
+.share-popup button {
+  width:100%;
+  margin-bottom:7px;
+  padding:8px;
+  border-radius:8px;
+  cursor:pointer;
+}
+    /* Hide default scrollbar */
+    ::-webkit-scrollbar {
+      display: none;
+    }
+</style>
+</head>
+<body>
+
+<h1>AFK Arena Link Hub</h1>
+        <a href="contact.html" class="active">Contact Us</a>
+<div style="text-align:right; margin-bottom:15px;">
+  <div class="custom-select">
+    <div id="filterBox" class="select-box">All</div>
+    <div id="filterMenu" class="select-options">
+      <div data-filter="all">All</div>
+      <div data-filter="official">Official</div>
+      <div data-filter="unofficial">Unofficial</div>
+      <div data-filter="top">Most Liked</div>
+    </div>
+  </div>
+</div>
+
+<!-- QR POPUP -->
+<div id="qrPopup" class="share-popup">
+  <div style="text-align:center;color:white;margin-bottom:10px;">Scan QR:</div>
+  <img id="qrImage" width="170" style="display:block;margin:auto;background:white;padding:8px;border-radius:10px;">
+  <button onclick="qrPopup.style.display='none'">Close</button>
+</div>
+
+<!-- SHARE POPUP -->
+<div id="sharePopup" class="share-popup">
+  <button onclick="openWhatsApp()">WhatsApp</button>
+  <button onclick="copyShare()">Copy For Discord</button>
+  <button onclick="copyShare()">Copy For Instagram</button>
+  <button onclick="copyShare()">Copy For Viber</button>
+  <button onclick="emailShare()">Email</button>
+  <button onclick="sharePopup.style.display='none'">Close</button>
+</div>
+
+<div class="link-list" id="linkList"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyBcLsgOSSf2cUNK_9G49L7kSbuzZ2lt0VQ",
+  authDomain: "afk-arena-e8f4a.firebaseapp.com",
+  projectId: "afk-arena-e8f4a",
+  storageBucket: "afk-arena-e8f4a.firebasestorage.app",
+  messagingSenderId: "827652125732",
+  appId: "1:827652125732:web:d8026c1fe271483aaf54b1"
+});
+
+const db = firebase.database();
+
+// Website list
+const links=[
+ {id:"official_site",name:"Official Website",url:"https://afkarena.lilith.com//",type:"official"},
+ {id:"official_site",name:"Official Store",url:"https://store.lilith.com///",type:"official"},
+ {id:"official_site",name:"Official Wiki",url:"https://en.wikipedia.org//",type:"official"},
+ {id:"discord",name:"Official Discord",url:"https://discord.gg/afkarena",type:"official"},
+ {id:"instagram",name:"Official Instagram",url:"https://instagram.com/afkarenaofficial",type:"official"},
+ {id:"youtube",name:"Official YouTube",url:"https://youtube.com/afkarena",type:"official"},
+ {id:"wiki",name:"Fandom Wiki",url:"https://afk-arena.fandom.com/wiki/AFK_Arena_Wiki",type:"unofficial"},
+ {id:"reddit",name:"Reddit",url:"https://reddit.com/r/afkarena",type:"unofficial"}
+];
+
+// Store votes locally
+let votes=JSON.parse(localStorage.getItem("votes")||"{}");
+
+// Render all
+renderList();
+
+function renderList(list=links){
+  linkList.innerHTML="";
+  list.forEach(link=>{
+    const card=document.createElement("div");
+    card.className="link-item";
+    card.innerHTML=`
+      <a class="link-title" href="${link.url}" target="_blank">${link.name}</a>
+      <div class="actions">
+        <div data-id="${link.id}" class="vote-btn like-btn">👍  
+          <span class="count" id="like-${link.id}">0</span>
+        </div>
+        <div data-id="${link.id}" class="vote-btn dislike-btn">👎
+          <span class="count" id="dislike-${link.id}">0</span>
+        </div>
+        <div class="share-btn" data-url="${link.url}">Share</div>
+        <div class="qr-btn" data-url="${link.url}">QR</div>
+      </div>
+    `;
+    linkList.appendChild(card);
+
+    updateLiveCounters(link.id);
+    updateActiveState(link.id);
+  });
+}
+
+// Update counters live from Firebase
+function updateLiveCounters(id){
+  db.ref(`links/${id}/likes`).on("value", snap=>{
+    document.getElementById(`like-${id}`).textContent = snap.val() || 0;
+  });
+  db.ref(`links/${id}/dislikes`).on("value", snap=>{
+    document.getElementById(`dislike-${id}`).textContent = snap.val() || 0;
+  });
+}
+
+// Update active button
+function updateActiveState(id){
+  const likeBtn=document.querySelector(`[data-id="${id}"].like-btn`);
+  const dislikeBtn=document.querySelector(`[data-id="${id}"].dislike-btn`);
+
+  likeBtn.classList.remove("active");
+  dislikeBtn.classList.remove("active");
+
+  if(votes[id]==="like") likeBtn.classList.add("active");
+  if(votes[id]==="dislike") dislikeBtn.classList.add("active");
+}
+
+// Vote logic
+async function vote(id,type){
+  const previous=votes[id];
+
+  let path="";
+  let opposite="";
+
+  if(type==="like"){ path="likes"; opposite="dislikes"; }
+  if(type==="dislike"){ path="dislikes"; opposite="likes"; }
+
+  if(previous===type){
+    votes[id]=null;
+    db.ref(`links/${id}/${path}`).transaction(v => (v||0)-1);
+  }
+  else{
+    votes[id]=type;
+    db.ref(`links/${id}/${path}`).transaction(v => (v||0)+1);
+    if(previous){
+      db.ref(`links/${id}/${opposite}`).transaction(v => (v||0)-1);
+    }
+  }
+
+  localStorage.setItem("votes",JSON.stringify(votes));
+  updateActiveState(id);
+}
+
+// CLICK HANDLER
+linkList.addEventListener("click",e=>{
+  const like=e.target.closest(".like-btn");
+  const dislike=e.target.closest(".dislike-btn");
+  const share=e.target.closest(".share-btn");
+  const qr=e.target.closest(".qr-btn");
+
+  if(like) vote(like.dataset.id,"like");
+  if(dislike) vote(dislike.dataset.id,"dislike");
+
+  if(share){
+    selectedURL = share.dataset.url;
+    sharePopup.style.display="block";
+  }
+
+  if(qr){
+    qrPopup.style.display="block";
+    qrImage.src=
+      "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="
+      +encodeURIComponent(qr.dataset.url);
+  }
+});
+
+/****************** SHARE FUNCTIONS ******************/
+let selectedURL="";
+function openWhatsApp(){ window.open("https://api.whatsapp.com/send?text="+selectedURL); }
+function copyShare(){ navigator.clipboard.writeText(selectedURL); alert("Copied!"); }
+function emailShare(){ location.href="mailto:?body="+selectedURL; }
+
+/**************** FILTER *****************/
+filterBox.onclick=()=>{
+ filterMenu.style.display=filterMenu.style.display==="block"?"none":"block";
+}
+filterMenu.onclick=e=>{
+ const f=e.target.dataset.filter;
+ if(!f)return;
+ filterBox.innerText=e.target.innerText;
+ filterMenu.style.display="none";
+
+ if(f==="all") return renderList();
+ if(f==="official") return renderList(links.filter(l=>l.type==="official"));
+ if(f==="unofficial") return renderList(links.filter(l=>l.type==="unofficial"));
+
+ if(f==="top"){
+   const sorted=[...links].sort((a,b)=>{
+     return parseInt(document.getElementById("like-"+b.id).innerText) -
+            parseInt(document.getElementById("like-"+a.id).innerText);
+   });
+   return renderList(sorted);
+ }
+}
+</script>
+</body>
+</html>
