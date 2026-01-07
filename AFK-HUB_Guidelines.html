@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/png" href="Website-Guide.png">
+  <title>Link Hub</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #151923;
+      --card: #1b2130;
+      --accent: #4f8cff;
+      --accent-soft: rgba(79,140,255,0.15);
+      --text: #e6e8ef;
+      --muted: #9aa3b2;
+      --border: #262c3d;
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% -10%, #182042, transparent), var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(to bottom, rgba(15,17,21,0.85), rgba(15,17,21,0.6));
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: auto;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .title-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 28px 20px 60px;
+    }
+
+    .section {
+      margin-bottom: 36px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .search {
+      width: 260px;
+      max-width: 100%;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 12px;
+      color: var(--text);
+      outline: none;
+    }
+
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, 1fr); /* Default: 3 columns */
+}
+
+@media (max-width: 899px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr); /* Tablets: 2 columns */
+  }
+}
+
+@media (max-width: 599px) {
+  .grid {
+    grid-template-columns: 1fr; /* Mobiles: 1 column */
+  }
+}
+::-webkit-scrollbar { display: none; }
+
+    .card {
+      background: linear-gradient(180deg, var(--card), #161b28);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.35), inset 0 0 0 1px var(--accent-soft);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #000;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.4;
+      max-height: calc(1.4em * 3);
+      overflow: hidden;
+      position: relative;
+      transition: max-height 0.2s ease;
+    }
+
+    .card:hover .card-desc {
+      max-height: 500px;
+    }
+
+    .tag {
+      align-self: flex-start;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid rgba(79,140,255,0.25);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 18px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      .header-inner { flex-direction: column; align-items: flex-start; }
+      .search { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo"><img id="headerIcon" src="Website-Guide.png" alt=""></div>
+      <div class="title-wrap">
+        <div class="title">Link Hub</div>
+        <div class="subtitle">Centralized access to tools, projects and resources</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="section-header">
+        <div class="section-title">Quick Access</div>
+        <input id="search" class="search" placeholder="Search links…" />
+      </div>
+
+      <div id="grid" class="grid">
+        <div class="card" data-title="MS-DOS Guide" onclick="openLink('https://darkshadow-dev.github.io/MS_DOS_GUIDE/MS-DOS_main.html')">
+          <div class="card-top">
+            <div class="icon"><img src="Website-Guide.png" alt=""></div>
+            <div class="card-title">MS-DOS Guide</div>
+          </div>
+          <div class="card-desc">Test go on your free will jk.</div>
+          <span class="tag">Docs</span>
+        </div>
+
+        <div class="card" data-title="AFK Arena Wiki" onclick="openLink('https://afk-arena.fandom.com/wiki/AFK_Arena_Wiki')">
+          <div class="card-top">
+            <div class="icon"><img src="https://images.wikia.com/afk-arena/images/b/bc/Wiki.png" alt="https://images.wikia.com/afk-arena/images/b/bc/Wiki.png"></div>
+            <div class="card-title">AFK Arena Wiki</div>
+          </div>
+          <div class="card-desc">Short description</div>
+          <span class="tag">Unofficial</span>
+        </div>
+
+        <div class="card" data-title="AFK Arena Guide" onclick="openLink('afk.guide')">
+          <div class="card-top">
+            <div class="icon"><img src="https://afk.guide/wp-content/uploads/2019/11/afk-guide-logo.png" alt=""></div>
+            <div class="card-title">AFK Arena Guide</div>
+          </div>
+          <div class="card-desc">AFK Arena Guides, Strategies & Tips Latest AFK Arena Guides New Guide Articles Basic Knowledge Miscellaneous Hero Guides Final Words Well, by now you might have got a complete idea of how interesting the game is. So what are you waiting for? Get your game now, read our AFK Arena guides and have the best</div>
+          <span class="tag">Unofficial</span>
+        </div>
+        <div class="card" data-title="AFK Arena Global" onclick="openLink('afk.global')">
+          <div class="card-top">
+            <div class="icon"><img src="https://images.wikia.com/afk-arena/images/b/bc/Wiki.png" alt="https://images.wikia.com/afk-arena/images/b/bc/Wiki.png"></div>
+            <div class="card-title">AFK Arena Global</div>
+          </div>
+          <div class="card-desc">AFK.Global is a fansite for the mobile idle games AFK Arena & AFK Journey by Lilith Games. We feature tier lists, guides and all the latest news.</div>
+          <span class="tag">Unofficial</span>
+        </div>
+        <div class="card" data-title="AFK Arena Gamerhub" onclick="openLink('https://gamerhub.gg/afk-arena/')">
+          <div class="card-top">
+            <div class="icon"><img src="https://gamerhub.gg/images/source/1af9c84b83964d8cb753396e76581752.jpg" alt="https://gamerhub.gg/images/source/1af9c84b83964d8cb753396e76581752.jpg"></div>
+            <div class="card-title">AFK Arena Gamerhub</div>
+          </div>
+          <div class="card-desc">Your updated AFK Arena wiki with tier lists, news, patch notes, guides, tips, cheat sheets, and more.</div>
+          <span class="tag">Unofficial</span>
+        </div>
+
+        <div class="card" data-title="AFK Arena" onclick="openLink('https://afkarena.lilith.com/')">
+          <div class="card-top">
+            <div class="icon"><img src="https://lilithimage.oss-cn-shanghai.aliyuncs.com/afk/imgs/en/afi_icon_new.png" alt=""></div>
+            <div class="card-title">AFK Arena</div>
+          </div>
+          <div class="card-desc">A classic RPG with stunning artistic beauty. The world of Esperia awaits you. Enjoy a multitude of unique heroes, seven uniquefactions, and earn rewards effortlessly!</div>
+          <span class="tag">Official</span>
+        </div>
+
+        <div class="card" data-title="AFK Arena Art" onclick="openLink('https://afk-artworks.lilithgames.com/artworks')">
+          <div class="card-top">
+            <div class="icon"><img src="https://lilithimage.oss-cn-shanghai.aliyuncs.com/afk/imgs/en/afi_icon_new.png" alt=""></div>
+            <div class="card-title">AFK Arena Art</div>
+          </div>
+          <div class="card-desc">Afk and chill</div>
+          <span class="tag">Official</span>
+        </div>
+
+</div>
+    </section>
+  </main>
+
+  <footer>
+    Ⓖ 2026 Link Hub
+  </footer>
+
+  <script>
+    function openLink(url, icon) {
+      if (!url || url === '#') return;
+      if (icon) document.getElementById('headerIcon').src = icon;
+      window.open(url, '_blank');
+    }
+
+    const search = document.getElementById('search');
+    const cards = [...document.querySelectorAll('.card')];
+
+    search.addEventListener('input', () => {
+      const q = search.value.toLowerCase();
+      cards.forEach(c => {
+        const t = c.dataset.title.toLowerCase();
+        c.style.display = t.includes(q) ? '' : 'none';
+      });
+    });
+
+    // set default header icon from first card
+    const firstIcon = document.querySelector('.card .icon img');
+    if (firstIcon) document.getElementById('headerIcon').src = firstIcon.src;
+  </script>
+
+</body>
+</html>
